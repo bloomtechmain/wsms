@@ -54,47 +54,44 @@ After setting environment variables, both services should automatically redeploy
 
 ---
 
-## Step 3: Initialize Database (ONE-TIME ONLY)
+## Step 3: Automatic Database Initialization ✨
 
-Once **wsms-server** is successfully deployed:
+Once **wsms-server** is successfully deployed, it will **automatically**:
 
-1. Navigate to **wsms-server** service in Railway
-2. Click on **"Settings"** → Scroll to **"Run a Command"**
-3. Enter this command:
-   ```bash
-   npm run init-db
-   ```
-4. Click "Run" and wait for success message
-5. This creates all database tables and tariff rates
+1. ✅ Check if database tables exist
+2. ✅ If not, create all tables from schema.sql
+3. ✅ Seed initial roles (Admin, Reader, Viewer)
+4. ✅ Create default user accounts
+5. ✅ Start serving requests
 
-**Expected Output:**
+**No manual commands needed!** The server handles everything on first startup.
+
+**Check server logs to see:**
 ```
-Reading SQL from: /app/server/src/sql/schema.sql
-Running migration...
-Migration completed successfully.
+🚀 Starting WSMS Server...
+🔍 Checking database status...
+📦 Tables not found. Running initial migration...
+⚙️  Creating database tables...
+✅ Database schema created successfully!
+👤 Seeding initial users...
+   ✓ Created role: Admin
+   ✓ Created role: Reader
+   ✓ Created role: Viewer
+   ✓ Created Admin: admin@wsms.com / 123456
+   ✓ Created Reader: reader@wsms.com / 123456
+   ✓ Created Viewer: viewer@wsms.com / 123456
+🎉 Database initialization complete!
+✅ Server is running on port 8080
 ```
+
+**Default User Accounts Created:**
+- **Admin:** `admin@wsms.com` / `123456`
+- **Reader:** `reader@wsms.com` / `123456`
+- **Viewer:** `viewer@wsms.com` / `123456`
 
 ---
 
-## Step 4: Create Admin User (ONE-TIME ONLY)
-
-After database initialization:
-
-1. Still in **wsms-server** → **Settings** → **"Run a Command"**
-2. Enter this command:
-   ```bash
-   npm run seed-users
-   ```
-3. Click "Run" and wait for success
-
-**This creates default users:**
-- **Admin:** `admin@wsms.com` / `admin123`
-- **Manager:** `manager@wsms.com` / `manager123`
-- **Collector:** `collector@wsms.com` / `collector123`
-
----
-
-## Step 5: Verify Deployment
+## Step 4: Verify Deployment
 
 ### Check Server Health
 Visit: `https://your-server-url.railway.app/health`
@@ -115,10 +112,10 @@ You should see the WSMS login page.
 
 ---
 
-## Step 6: Test Login
+## Step 5: Test Login
 
 1. Open the client URL in your browser
-2. Log in with: `admin@wsms.com` / `admin123`
+2. Log in with: `admin@wsms.com` / `123456`
 3. You should be redirected to the dashboard
 
 ---
@@ -136,13 +133,16 @@ You should see the WSMS login page.
 - Verify CORS is configured (it should be by default)
 
 ### Tables not found error
-- Run the `npm run init-db` command in wsms-server
-- Check server logs for any migration errors
+- Check server logs for auto-migration errors
+- Verify DATABASE_URL is correctly set
+- Ensure Postgres service is online
+- Redeploy wsms-server to trigger migration again
 
 ### Can't login
-- Ensure you ran `npm run seed-users`
-- Check server logs for authentication errors
+- Check server logs for user seeding errors
+- Verify DATABASE_URL connection
 - Verify JWT_SECRET is set
+- Try default credentials: admin@wsms.com / 123456
 
 ---
 
@@ -158,15 +158,14 @@ After deployment, save these URLs:
 
 ## Optional: Add Dummy Data
 
-If you want to test with sample customers and bills:
+If you want to test with sample customers and bills, you can manually run the seed script locally:
 
-1. Go to **wsms-server** → **Settings** → **"Run a Command"**
-2. Run:
-   ```bash
-   npm run seed-dummy
-   ```
+```bash
+# Connect to your Railway database and run:
+npm run seed-dummy
+```
 
-This adds sample customers, readings, and bills for testing.
+This adds sample customers, readings, and bills for testing. (Note: Manual command execution requires local setup with Railway database credentials)
 
 ---
 

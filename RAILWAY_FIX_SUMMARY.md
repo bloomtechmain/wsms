@@ -71,25 +71,20 @@ PORT=5173
 
 Both services will automatically redeploy after you save the variables.
 
-### **STEP 3: Initialize Database** (30 seconds)
+### **STEP 3: Automatic Initialization** ✨ (30 seconds)
 
-In Railway → wsms-server → Settings → "Run a Command":
-```bash
-npm run init-db
-```
+The server automatically initializes on first deployment!
 
-This creates all database tables from `server/src/sql/schema.sql`.
+**What happens automatically:**
+- ✅ Checks if tables exist
+- ✅ Creates all database tables
+- ✅ Seeds roles (Admin, Reader, Viewer)
+- ✅ Creates default user accounts
+- ✅ Starts serving requests
 
-### **STEP 4: Create Admin Users** (30 seconds)
+**No manual commands needed!** Just watch the server logs.
 
-In Railway → wsms-server → Settings → "Run a Command":
-```bash
-npm run seed-users
-```
-
-This creates default users (admin, manager, collector).
-
-### **STEP 5: Test Your Application** ✅
+### **STEP 4: Test Your Application** ✅
 
 1. Open your wsms-client Railway URL
 2. Login with: `admin@wsms.com` / `admin123`
@@ -192,9 +187,9 @@ restartPolicyMaxRetries = 10
 
 | Command | Purpose | When to Run |
 |---------|---------|-------------|
-| `npm run init-db` | Create database tables | Once (after first deploy) |
-| `npm run seed-users` | Create default users | Once (after init-db) |
-| `npm run seed-dummy` | Add sample data | Optional (for testing) |
+| Auto-migration | Create database tables | Auto (on first startup) |
+| Auto-seeding | Create default users | Auto (on first startup) |
+| `npm run seed-dummy` | Add sample data | Manual (optional testing) |
 | `npm run build` | Build TypeScript | Auto (Railway handles) |
 | `npm start` | Start server | Auto (Railway handles) |
 
@@ -216,15 +211,17 @@ restartPolicyMaxRetries = 10
 
 ### **Problem: "relation does not exist" error**
 **Solution:**
-1. Run `npm run init-db` in wsms-server
-2. Check server logs for migration errors
+1. Check server logs for auto-migration errors
+2. Verify DATABASE_URL is correctly set
 3. Verify Postgres service is online
+4. Redeploy wsms-server to trigger migration
 
 ### **Problem: Login returns 401 Unauthorized**
 **Solution:**
 1. Ensure JWT_SECRET is set
-2. Run `npm run seed-users` to create accounts
-3. Clear browser cache and try again
+2. Check server logs for user seeding errors
+3. Try default credentials: admin@wsms.com / 123456
+4. Clear browser cache and try again
 
 ### **Problem: Health check returns 503**
 **Solution:**

@@ -1,6 +1,6 @@
 # Quick Railway Deployment Steps
 
-## 🚀 Fast Setup (5 Minutes)
+## 🚀 Fast Setup (3 Minutes) - Fully Automated!
 
 ### Step 1: Set Environment Variables (2 min)
 
@@ -22,19 +22,15 @@ PORT=5173
 ### Step 2: Deploy (Auto) ✅
 Both services will automatically redeploy after setting variables.
 
-### Step 3: Initialize Database (1 command)
-In Railway → wsms-server → Settings → "Run a Command":
-```bash
-npm run init-db
-```
+### Step 3: Deploy & Auto-Initialize ✅
+Both services will automatically deploy and the database will initialize on first startup!
 
-### Step 4: Create Users (1 command)
-In Railway → wsms-server → Settings → "Run a Command":
-```bash
-npm run seed-users
-```
+The server automatically:
+- Creates all database tables
+- Seeds default users
+- Starts serving requests
 
-### Step 5: Test Login ✅
+### Step 4: Test Login ✅
 - **URL:** Your wsms-client Railway URL
 - **Login:** admin@wsms.com / admin123
 
@@ -77,12 +73,14 @@ After running `npm run seed-users`:
 - ✅ Set VITE_API_URL in client variables
 
 **Tables Not Found**
-- ❌ Migration not run
-- ✅ Run: `npm run init-db`
+- ❌ Auto-migration failed
+- ✅ Check server logs for migration errors
+- ✅ Verify DATABASE_URL is correct
 
 **Can't Login**
-- ❌ Users not seeded
-- ✅ Run: `npm run seed-users`
+- ❌ User seeding failed
+- ✅ Check server logs for seed errors
+- ✅ Verify database connection
 
 ---
 
