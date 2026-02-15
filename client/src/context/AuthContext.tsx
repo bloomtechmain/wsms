@@ -17,12 +17,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     if (token) {
-      // Ideally validate token or fetch user profile
-      // For now, assume if token exists we are logged in, or we'd fetch profile
-      // setUser(...) from localStorage or API
       const storedUser = localStorage.getItem('user');
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
+      
+      // Validate and parse safely
+      if (storedUser && storedUser !== 'undefined' && storedUser !== 'null') {
+        try {
+          const parsedUser = JSON.parse(storedUser);
+          setUser(parsedUser);
+        } catch (error) {
+          console.error('Failed to parse stored user:', error);
+          // Clear invalid data
+          localStorage.removeItem('user');
+          localStorage.removeItem('token');
+          setToken(null);
+        }
+      } else if (storedUser === 'undefined' || storedUser === 'null') {
+        // Clear invalid data
+        localStorage.removeItem('user');
       }
     }
   }, [token]);
