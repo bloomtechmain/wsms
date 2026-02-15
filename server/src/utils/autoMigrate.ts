@@ -35,7 +35,8 @@ export async function autoMigrate(): Promise<void> {
     console.log('📦 Tables not found. Running initial migration...');
     
     // Read and execute schema.sql
-    const sqlPath = path.join(__dirname, '../sql/schema.sql');
+    // Note: __dirname points to dist/utils, so we need to go back to src
+    const sqlPath = path.join(__dirname, '../../src/sql/schema.sql');
     console.log(`📄 Reading schema from: ${sqlPath}`);
     const sql = fs.readFileSync(sqlPath, 'utf8');
     
