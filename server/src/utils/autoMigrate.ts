@@ -28,7 +28,6 @@ export async function autoMigrate(): Promise<void> {
     
     if (tablesExist) {
       console.log('✅ Database tables already exist. Skipping migration.');
-      client.release();
       return;
     }
     
